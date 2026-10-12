@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="pt"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Poliglota">
+<meta name="theme-color" content="#0F2A47">
+<link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon-180.png">
+<title>Mundo Poliglota</title>
+<style>
+:root{--n:#0F2A47;--n2:#1B4A7A;--y:#F2B544;--bg:#F4F6FA;--t:#1B2B3C;--m:#6B7A8C;--b:#E3E8EF;--ok:#1FA971;--bad:#E5484D}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#dfe6f0;color:var(--t)}
+#app{max-width:480px;height:100%;margin:0 auto;display:flex;flex-direction:column;background:var(--bg)}
+header{padding:calc(12px + env(safe-area-inset-top)) 16px 12px;background:linear-gradient(160deg,var(--n),var(--n2));color:#fff;display:flex;align-items:center;gap:10px}
+header img{width:34px;height:34px;border-radius:8px}header b{flex:1}header span{background:var(--y);color:var(--n);border-radius:99px;padding:4px 11px;font-weight:700;font-size:13px}
+main{flex:1;overflow:auto;padding:14px;-webkit-overflow-scrolling:touch}
+nav{display:flex;background:#fff;border-top:1px solid var(--b);padding:6px 0 calc(6px + env(safe-area-inset-bottom))}
+nav button{flex:1;border:0;background:0;color:var(--m);font-size:11px;font-weight:500;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px;cursor:pointer}nav .on{color:var(--n);font-weight:700}
+.card{background:#fff;border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:0 1px 4px #0f2a4714}
+h2{color:var(--n);margin:8px 0}h3{color:var(--n);margin-bottom:8px}.mu{color:var(--m);font-size:13px;margin:4px 0}.ctr{text-align:center}.big{font-size:48px;font-weight:700;color:var(--n)}
+.tag{background:#E7EEF8;color:var(--n2);border-radius:99px;padding:2px 9px;font-size:12px;font-weight:600}
+input,select,textarea{width:100%;padding:12px;margin:5px 0;border:1.5px solid var(--b);border-radius:12px;font-size:16px;background:#fff;color:var(--t);font-family:inherit}textarea{min-height:80px}
+.btn{display:block;width:100%;border:0;border-radius:13px;padding:14px;margin-top:8px;background:var(--n);color:#fff;font-size:15px;font-weight:700;text-align:center;text-decoration:none;cursor:pointer}
+.btn.y{background:var(--y);color:var(--n)}.btn.o{background:#fff;color:var(--n);border:1.5px solid var(--b)}
+.ib{border:0;background:var(--bg);width:38px;height:38px;border-radius:11px;font-size:18px;color:var(--n);cursor:pointer}
+.ls{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid #eef1f6;cursor:pointer}.ls:last-child{border:0}.ls b{flex:1;font-size:14px}.ls small{color:var(--m)}
+.dot{width:30px;height:30px;border-radius:50%;background:var(--bg);display:grid;place-items:center;color:var(--n);font-size:12px}.dot.ok{background:var(--ok);color:#fff}
+.vid{position:relative;padding-top:56.25%;background:#000;border-radius:14px;overflow:hidden;margin:8px 0}.vid iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+video,.full{width:100%;border-radius:14px;margin:8px 0;background:#000}
+.gm{cursor:pointer}.x{border:0;background:0;color:var(--bad);font-size:18px;cursor:pointer}
+.hud{font-weight:700;color:var(--n);margin-bottom:8px}.opt{display:block;width:100%;padding:14px;margin-top:9px;border-radius:13px;border:2px solid var(--b);background:#fff;font-size:16px;font-weight:600;text-align:left;cursor:pointer;color:var(--t)}
+.opt.ok{background:#E3F6EC;border-color:var(--ok)}.opt.bad{background:#FDECEC;border-color:var(--bad)}
+.ans{min-height:54px;border-bottom:2px solid var(--b);margin:10px 0;font-size:20px;color:var(--n)}.wc{padding:10px 14px;margin:4px;border-radius:11px;border:2px solid var(--b);background:#fff;font-weight:600;font-size:15px;cursor:pointer}.wc:disabled{opacity:.35}
+.mg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.mc{height:78px;border:0;border-radius:12px;background:var(--n);color:#fff;font-size:12px;font-weight:600;padding:4px;cursor:pointer}.mc.up{background:var(--y);color:var(--n)}.mc.done{background:var(--ok);color:#fff}
+.av{width:96px;height:96px;border-radius:50%;object-fit:cover;background:#ddd;cursor:pointer}
+.lg{min-height:100%;background:linear-gradient(170deg,var(--n),#081A2D);color:#fff;padding:calc(34px + env(safe-area-inset-top)) 24px 24px;text-align:center}
+.lg img{width:130px;border-radius:28px;margin:6px auto 16px;display:block}.lg .s{opacity:.7;margin:6px 0 20px;font-size:14px}.lnk{margin-top:16px;font-weight:600;cursor:pointer;font-size:14px}
+#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);max-width:90%;background:#101820;color:#fff;padding:11px 18px;border-radius:14px;opacity:0;transition:.3s;pointer-events:none;font-size:14px;z-index:9}#toast.on{opacity:1}
+</style></head><body><div id="app"></div><div id="toast"></div>
+<script>
+// ===== Configuração (a chave "publishable" é pública por desenho) =====
+const U='https://qncopukzrpttlggqfbee.supabase.co',K='sb_publishable_qsakfkmlO9ObZR6iPyB84w_-50l31wC';
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),shuf=a=>[...a].sort(()=>Math.random()-.5),norm=s=>String(s).trim().split(/\s+/).join(' ').toLowerCase();
+let tok=null,uid=null,me=null,V='courses',sub=null,AUTH='in',LS=[],D=1,G=null,tm=null;
+const toast=t=>{const e=$('#toast');e.textContent=t;e.className='on';setTimeout(()=>e.className='',Math.max(2500,t.length*60))};
+async function rq(path,o={}){const h={apikey:K,...(o.h||{})};if(tok)h.Authorization='Bearer '+tok;let b=o.body;
+ if(b&&!(b instanceof Blob)){h['Content-Type']='application/json';b=JSON.stringify(b)}
+ const r=await fetch(U+path,{method:o.m||'GET',headers:h,body:b}),t=await r.text();
+ if(!r.ok){let m=t;try{const j=JSON.parse(t);m=j.msg||j.message||j.error_description||j.error||t}catch{}throw new Error(m)}
+ try{return t?JSON.parse(t):null}catch{return null}}
+const get=q=>rq('/rest/v1/'+q),post=(t,b)=>rq('/rest/v1/'+t,{m:'POST',body:b,h:{Prefer:'return=minimal'}}),patch=(q,b)=>rq('/rest/v1/'+q,{m:'PATCH',body:b,h:{Prefer:'return=minimal'}}),del=q=>rq('/rest/v1/'+q,{m:'DELETE'});
+async function up(bucket,path,f){await rq(`/storage/v1/object/${bucket}/${path}`,{m:'POST',body:f,h:{'x-upsert':'true','Content-Type':f.type||'application/octet-stream'}});return `${U}/storage/v1/object/public/${bucket}/${path}`}
+// ===== Sessão =====
+function sess(j){tok=j.access_token;uid=j.user.id;localStorage.rt=j.refresh_token}
+const loadMe=async()=>{me=(await get(`profiles?id=eq.${uid}&select=*`))[0]};
+async function resume(){const r=localStorage.rt;if(!r)return false;try{sess(await rq('/auth/v1/token?grant_type=refresh_token',{m:'POST',body:{refresh_token:r}}));await loadMe();return true}catch{return false}}
+setInterval(()=>{if(tok&&localStorage.rt)rq('/auth/v1/token?grant_type=refresh_token',{m:'POST',body:{refresh_token:localStorage.rt}}).then(sess).catch(()=>{})},50*60*1000);
+async function auth(){try{const e=$('#le').value.trim(),p=$('#lp').value;
+ if(AUTH=='up'){const n=$('#ln').value.trim();if(!n)throw new Error('Indica o teu nome.');const j=await rq('/auth/v1/signup',{m:'POST',body:{email:e,password:p,data:{full_name:n}}});if(!j.access_token)throw new Error('Conta criada. Confirma o teu e-mail e depois entra.');sess(j)}
+ else{if(!e||!p)throw new Error('Indica o e-mail e a palavra-passe.');sess(await rq('/auth/v1/token?grant_type=password',{m:'POST',body:{email:e,password:p}}))}
+ await loadMe();V='courses';render()}catch(x){toast(x.message)}}
+const logout=()=>{localStorage.removeItem('rt');tok=uid=me=null;sub=null;render()};
+const dl=()=>JSON.parse(localStorage.dl||'[]');
+function offl(){me={role:'student',xp:0,full_name:''};uid='';V='courses';render()}
+// ===== Estrutura =====
+const P={book:'M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 19V5',game:'M7 6h10a4 4 0 0 1 4 4v4a4 4 0 0 1-4 4h-1l-2-2h-4l-2 2H7a4 4 0 0 1-4-4v-4a4 4 0 0 1 4-4zM8 10v4M6 12h4',user:'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0',shield:'M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z'};
+const ic=n=>`<svg width=22 height=22 viewBox="0 0 24 24" fill=none stroke=currentColor stroke-width=1.9 stroke-linecap=round stroke-linejoin=round><path d="${P[n]}"/></svg>`;
+function render(){const a=$('#app');
+ if(!me){a.innerHTML=`<div class=lg><img src=icon-512.png><h2 style=color:#fff>Bem-vindo</h2><p class=s>A tua escola de idiomas no bolso</p>${AUTH=='up'?'<input id=ln placeholder=Nome>':''}<input id=le type=email placeholder=E-mail autocapitalize=off><input id=lp type=password placeholder=Palavra-passe><button class="btn y" onclick="auth()">${AUTH=='up'?'Criar conta':'Entrar'}</button><p class=lnk onclick="AUTH=AUTH=='up'?'in':'up';render()">${AUTH=='up'?'Já tenho conta':'Ainda não tens conta? Cria uma'}</p>${dl().length?'<p class=lnk onclick="offl()">Ver downloads (sem internet)</p>':''}</div>`;return}
+ const nav=[['courses','Cursos','book'],['games','Jogos','game'],['me','Perfil','user'],...(me.role=='admin'?[['admin','Admin','shield']]:[])];
+ a.innerHTML=`<header><img src=icon-180.png><b>Mundo Poliglota</b><span>⭐ ${me.xp}</span></header><main id=m></main><nav>${nav.map(n=>`<button class="${V==n[0]&&!sub?'on':''}" onclick="go('${n[0]}')">${ic(n[2])}${n[1]}</button>`).join('')}</nav>`;draw()}
+async function draw(){const m=$('#m');if(!m)return;const f=sub||({courses:vCourses,games:vGames,me:vMe,admin:vAdmin})[V];try{m.innerHTML=await f()}catch(e){m.innerHTML=`<div class="card mu">${esc(e.message)}</div>`}}
+function stop(){if(G){G.over=true;G=null}clearInterval(tm)}
+const go=v=>{stop();sub=null;V=v;render()},back=()=>{stop();sub=null;render()};
+async function addXp(n){if(!uid||n<=0)return;me.xp+=n;await patch(`profiles?id=eq.${uid}`,{xp:me.xp});const s=document.querySelector('header span');if(s)s.textContent='⭐ '+me.xp}
+// ===== Cursos e aulas =====
+async function vCourses(){try{if(!tok)throw 0;const [cs,ls,pg]=await Promise.all([get('courses?select=*&order=created_at'),get('lessons?select=*&order=position,created_at'),get(`progress?user_id=eq.${uid}&select=lesson_id`)]);LS=ls;const done=new Set(pg.map(p=>p.lesson_id)),off=new Set(dl().map(x=>x.id));
+ return cs.length?cs.map(c=>`<div class=card><h3>${esc(c.title)} <span class=tag>${esc(c.level)}</span></h3>${c.description?`<p class=mu>${esc(c.description)}</p>`:''}${ls.filter(l=>l.course_id==c.id).map(l=>`<div class=ls onclick="lesson('${l.id}')"><span class="dot ${done.has(l.id)?'ok':''}">${done.has(l.id)?'✓':'▶'}</span><b>${esc(l.title)}</b>${off.has(l.id)?'<small>offline</small>':''}</div>`).join('')||'<p class=mu>Sem aulas ainda.</p>'}</div>`).join(''):'<div class="card mu">Ainda não há cursos publicados.</div>'}
+ catch{const d=dl();return '<div class="card mu">Sem ligação. A mostrar as aulas descarregadas.</div>'+(d.length?d.map(l=>`<div class="card ls" onclick="lesson('${l.id}')"><b>${esc(l.title)}</b></div>`).join(''):'<div class="card mu">Nada descarregado.</div>')}}
+async function cget(u){try{return await (await caches.open('dl')).match(u)}catch{return null}}
+function lesson(id){const l=LS.find(x=>x.id==id)||dl().find(x=>x.id==id);if(!l)return;
+ sub=async()=>{let src=l.source,off=false;if(l.kind!='youtube'){const r=await cget(l.source);if(r){src=URL.createObjectURL(await r.blob());off=true}}
+ const media=l.kind=='youtube'?`<div class=vid><iframe src="https://www.youtube.com/embed/${esc(l.source)}?playsinline=1&rel=0&origin=${encodeURIComponent(location.origin)}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>`:l.kind=='video'?`<video controls playsinline src="${esc(src)}"></video>`:l.kind=='image'?`<img class=full src="${esc(src)}">`:`<a class=btn target=_blank href="${esc(src)}">Abrir ficheiro</a>`;
+ return `<button class=ib onclick="back()">←</button><h2>${esc(l.title)}</h2>${media}${l.kind!='youtube'?`<button class="btn o" onclick="toggleDl('${l.id}')">${off?'Remover download':'Descarregar para ver offline'}</button>`:`<a class="btn o" target=_blank href="https://www.youtube.com/watch?v=${esc(l.source)}">Abrir no YouTube</a>`}${uid?`<button class="btn y" onclick="doneL('${l.id}')">Marcar como concluída</button>`:''}`};draw()}
+async function toggleDl(id){const l=LS.find(x=>x.id==id)||dl().find(x=>x.id==id);try{const c=await caches.open('dl');
+ if(await c.match(l.source)){await c.delete(l.source);localStorage.dl=JSON.stringify(dl().filter(x=>x.id!=id));toast('Download removido')}
+ else{toast('A descarregar…');const r=await fetch(l.source);if(!r.ok)throw new Error('Falha no download');await c.put(l.source,r);localStorage.dl=JSON.stringify([...dl().filter(x=>x.id!=id),{id:l.id,title:l.title,kind:l.kind,source:l.source}]);toast('Disponível offline')}}catch(e){toast(e.message)}lesson(id)}
+async function doneL(id){try{const h=await get(`progress?user_id=eq.${uid}&lesson_id=eq.${id}&select=lesson_id`);if(!h.length){await post('progress',{user_id:uid,lesson_id:id});await addXp(20);toast('Aula concluída! +20 XP')}back()}catch(e){toast(e.message)}}
+// ===== Jogos =====
+const GM=[['vocab','Vocabulário','Escolhe a palavra certa'],['grammar','Gramática','Completa a frase'],['listening','Ouve e escolhe','Compreensão oral'],['translate','Tradução','Escolhe a tradução'],['spelling','Soletra','Escreve a palavra em inglês'],['order','Constrói a frase','Ordena as palavras'],['memory','Pares','Memória de vocabulário'],['speed','Contra-relógio','Todas as matérias contra o tempo']];
+const vGames=()=>`<div class=card><label class=mu>Dificuldade</label><select onchange="D=+this.value">${['Fácil','Médio','Difícil'].map((x,i)=>`<option value=${i+1} ${D==i+1?'selected':''}>${x}</option>`).join('')}</select><p class=mu>Difícil = menos tempo, menos vidas e mais pontos.</p></div>`+GM.map(g=>`<div class="card gm" onclick="play('${g[0]}')"><b>${g[1]}</b><br><span class=mu>${g[2]}</span></div>`).join('');
+function say(t){try{const u=new SpeechSynthesisUtterance(t);u.lang='en-US';speechSynthesis.cancel();speechSynthesis.speak(u)}catch{}}
+async function play(game){let all;try{all=await get('questions?select=*')}catch{return toast('Precisas de internet para jogar.')}
+ if(game=='memory')return memory(all.filter(q=>q.game=='vocab'));
+ const pool=all.filter(q=>(game=='speed'?q.game!='memory':q.game==game)&&(['spelling','order'].includes(q.game)||(q.options||[]).length>=2));let lv=pool.filter(q=>q.difficulty==D);if(lv.length<4)lv=pool.filter(q=>q.difficulty<=D);
+ const qs=shuf(lv).slice(0,game=='speed'?200:8+D*2);if(!qs.length)return toast('Ainda não há perguntas neste jogo. O professor vai adicioná-las.');
+ stop();G={game,qs,i:0,score:0,right:0,lives:[5,3,2][D-1],tl:game=='speed'?[60,45,30][D-1]:0,lock:0};
+ sub=()=>'<button class=ib onclick="back()">←</button><div class=card style="margin-top:10px"><div class=hud id=hud></div><h3 id=ql></h3><div id=ar></div></div>';await draw();tm=setInterval(tick,1000);show()}
+function hud(){const h=$('#hud');if(h&&G)h.textContent=`Vidas: ${G.lives}  ·  Pontos: ${G.score}  ·  ${Math.max(G.tl,0)}s  ·  ${Math.min(G.i+1,G.qs.length)}/${G.game=='speed'?'∞':G.qs.length}`}
+function tick(){if(!G||G.over){clearInterval(tm);return}if(G.lock&&G.game!='speed')return;G.tl--;hud();if(G.tl<=0)G.game=='speed'?end():res(false)}
+function show(){if(!G||G.over)return;G.lock=0;if(G.i>=G.qs.length)return end();const q=G.qs[G.i];if(G.game!='speed')G.tl=[20,14,8][D-1];hud();
+ $('#ql').textContent=q.game=='listening'?'Ouve e escolhe o que ouviste':q.game=='spelling'?'Escreve em inglês: '+q.prompt:q.game=='order'?'Ordena a frase: '+q.prompt:q.prompt;const a=$('#ar');
+ if(q.game=='spelling')a.innerHTML=`<button class="btn o" onclick="say(G.qs[G.i].answer)">Ouvir</button><input id=sp placeholder=Resposta autocapitalize=off autocomplete=off><button class="btn y" onclick="res(norm($('#sp').value)==norm(G.qs[G.i].answer))">Verificar</button>`;
+ else if(q.game=='order'){G.got=[];a.innerHTML=`<div id=got class=ans></div><div>${shuf(q.answer.trim().split(/\s+/)).map(x=>`<button class=wc data-w="${esc(x)}" onclick="pickW(this)">${esc(x)}</button>`).join('')}</div><button class="btn y" onclick="res(norm(G.got.join(' '))==norm(G.qs[G.i].answer))">Verificar</button>`}
+ else{if(q.game=='listening')say(q.prompt);a.innerHTML=(q.game=='listening'?'<button class="btn o" onclick="say(G.qs[G.i].prompt)">Ouvir</button>':'')+shuf(q.options||[]).map(o=>`<button class=opt data-o="${esc(o)}" onclick="res(norm(this.dataset.o)==norm(G.qs[G.i].answer),this)">${esc(o)}</button>`).join('')}}
+function pickW(b){G.got.push(b.dataset.w);b.disabled=true;$('#got').textContent=G.got.join(' ')}
+async function res(ok,b){if(!G||G.lock||G.over)return;G.lock=1;const q=G.qs[G.i];if(ok){G.right++;G.score+=10*D+(G.game=='speed'?5:Math.max(G.tl,0)>>1)}else G.lives--;
+ if(b)b.classList.add(ok?'ok':'bad');if(!ok)document.querySelectorAll('.opt').forEach(x=>{if(norm(x.dataset.o)==norm(q.answer))x.classList.add('ok')});
+ $('#ql').textContent=(ok?'Correto! ':'Resposta: '+q.answer+'. ')+(q.hint||'');hud();await new Promise(r=>setTimeout(r,ok?700:1600));if(!G||G.over)return;if(G.lives<=0)return end();G.i++;show()}
+async function end(){if(!G||G.done)return;const g=G;g.done=1;g.over=true;clearInterval(tm);try{await post('scores',{user_id:uid,game:g.game,difficulty:D,points:g.score});await addXp(Math.floor(g.score/5))}catch{}
+ sub=()=>`<div class="card ctr"><h2>Fim do jogo!</h2><p class=big>${g.score}</p><p>pontos · ${g.right} certas</p><button class="btn y" onclick="back()">Concluir</button></div>`;G=null;draw()}
+function memory(vq){const qs=shuf(vq).slice(0,[4,6,8][D-1]);if(qs.length<2)return toast('São precisas pelo menos 2 perguntas de Vocabulário.');
+ const cards=shuf(qs.flatMap(q=>[[q.id,q.prompt],[q.id,q.answer]]));let first=null,busy=false,found=0,moves=0;
+ sub=()=>`<button class=ib onclick="back()">←</button><p id=mh class=mu></p><div class=mg>${cards.map((c,i)=>`<button class=mc data-i="${i}">?</button>`).join('')}</div>`;
+ draw().then(()=>{const h=()=>{$('#mh').textContent=`Jogadas: ${moves}   Pares: ${found}/${qs.length}`};h();
+ document.querySelectorAll('.mc').forEach(b=>b.onclick=async()=>{if(busy||b===first||b.classList.contains('done'))return;const c=cards[+b.dataset.i];b.textContent=c[1];b.classList.add('up');if(!first){first=b;return}
+ moves++;const f=first;first=null;
+ if(cards[+f.dataset.i][0]==c[0]){f.classList.replace('up','done');b.classList.replace('up','done');found++;h();if(found==qs.length){const pts=Math.max(20,qs.length*40-moves*4)*D;try{await post('scores',{user_id:uid,game:'memory',difficulty:D,points:pts});await addXp(Math.floor(pts/5))}catch{}toast(`Parabéns! ${pts} pontos`);back()}return}
+ busy=true;h();await new Promise(r=>setTimeout(r,800));[f,b].forEach(x=>{x.textContent='?';x.classList.remove('up')});busy=false})})}
+// ===== Perfil =====
+const vMe=()=>`<div class="card ctr"><label><img id=avi class=av src="${esc(me.avatar_url||'icon-180.png')}"><input type=file accept="image/*" hidden onchange="setAv(this.files[0])"></label><p class=mu>Toca na foto para a alterar</p><p class=mu>Nível ${Math.floor(me.xp/100)+1} · ${me.xp} XP</p></div><div class=card><input id=pn value="${esc(me.full_name)}" placeholder=Nome><textarea id=pb placeholder="Fala um pouco sobre ti">${esc(me.bio||'')}</textarea><button class="btn y" onclick="saveMe()">Guardar perfil</button></div><div class="card mu">No iPhone: Safari → Partilhar → Adicionar ao ecrã principal.</div><button class="btn o" onclick="logout()">Terminar sessão</button>`;
+async function setAv(f){if(!f)return;try{const ext=(f.name.match(/\.[^.]+$/)||['.jpg'])[0].toLowerCase(),url=await up('avatars',`${uid}/avatar${ext}`,f)+'?v='+Date.now();await patch(`profiles?id=eq.${uid}`,{avatar_url:url});me.avatar_url=url;$('#avi').src=url;toast('Foto atualizada')}catch(e){toast(e.message)}}
+async function saveMe(){const n=$('#pn').value.trim();if(!n)return toast('O nome não pode ficar vazio.');try{await patch(`profiles?id=eq.${uid}`,{full_name:n,bio:$('#pb').value});me.full_name=n;me.bio=$('#pb').value;toast('Perfil guardado.')}catch(e){toast(e.message)}}
+// ===== Administração =====
+const QG=GM.filter(g=>!['memory','speed'].includes(g[0]));
+async function vAdmin(){const [cs,ls]=await Promise.all([get('courses?select=*&order=created_at'),get('lessons?select=*&order=created_at.desc')]);
+ return `<div class=card><h3>1. Novo curso</h3><input id=ct placeholder="Título do curso"><input id=cl placeholder="Nível (A1, A2, B1…)"><input id=cd placeholder="Descrição (opcional)"><button class="btn y" onclick="newCourse()">Criar curso</button></div>
+<div class=card><h3>2. Publicar aula (do teu dispositivo)</h3><select id=sc>${cs.map(c=>`<option value=${c.id}>${esc(c.title)} (${esc(c.level)})</option>`).join('')}</select><input id=lt placeholder="Título da aula (opcional)"><label class=btn>Escolher vídeo, foto ou ficheiro…<input type=file hidden onchange="pub(this.files[0])"></label><p id=st class=mu></p></div>
+<div class=card><h3>3. Importar do YouTube</h3><p class=mu>Cola um ou vários links (vídeo, short, playlist ou canal), separados por espaço. Vídeos e shorts não precisam de chave.</p><textarea id=yp placeholder="Links"></textarea><input id=yk placeholder="Chave da YouTube Data API (playlists e canais)" value="${esc(localStorage.ytk||'')}"><button class=btn onclick="imp()">Importar</button></div>
+<div class=card><h3>4. Nova pergunta de jogo</h3><select id=qg>${QG.map(g=>`<option value=${g[0]}>${g[1]}</option>`).join('')}</select><select id=qd><option value=1>Fácil</option><option value=2>Médio</option><option value=3>Difícil</option></select><input id=qp placeholder="Pergunta / frase / palavra"><input id=qo placeholder="Opções separadas por vírgula"><input id=qa placeholder="Resposta certa"><input id=qh placeholder="Explicação (opcional)"><button class="btn y" onclick="saveQ()">Guardar pergunta</button></div>
+<div class=card><h3>5. Aulas publicadas</h3>${ls.map(l=>`<div class=ls><b>${esc(l.title)}</b><small>${esc(l.kind)}</small><button class=x onclick="rm('${l.id}')">✕</button></div>`).join('')||'<p class=mu>Nenhuma.</p>'}</div>
+<div class=card><h3>6. As minhas credenciais</h3><input id=ne type=email placeholder="Novo e-mail"><input id=np type=password placeholder="Nova palavra-passe (mín. 6)"><button class=btn onclick="cred()">Atualizar credenciais</button></div>`}
+async function newCourse(){const t=$('#ct').value.trim();if(!t)return toast('Indica o título do curso.');try{await post('courses',{title:t,level:$('#cl').value.trim()||'A1',description:$('#cd').value.trim()||null});toast('Curso criado.');draw()}catch(e){toast(e.message)}}
+async function pub(f){if(!f)return;const cid=$('#sc').value;if(!cid)return toast('Cria e escolhe primeiro um curso.');const ext=(f.name.match(/\.[^.]+$/)||[''])[0].toLowerCase(),kind=['.mp4','.mov','.m4v','.webm'].includes(ext)?'video':['.jpg','.jpeg','.png','.webp','.heic'].includes(ext)?'image':'file';
+ $('#st').textContent='A enviar… não feches a página.';try{const url=await up('media',`lessons/${crypto.randomUUID()}${ext}`,f);await post('lessons',{course_id:cid,title:$('#lt').value.trim()||f.name.replace(/\.[^.]+$/,''),kind,source:url});toast('Publicado. Os alunos já o veem.');draw()}catch(e){$('#st').textContent=e.message}}
+const vidId=s=>(s.match(/(?:youtu\.be\/|youtube\.com\/(?:shorts\/|embed\/|live\/|v\/)|[?&]v=)([A-Za-z0-9_-]{11})/)||[])[1];
+async function yt(u){const r=await fetch(u),j=await r.json();if(!r.ok)throw new Error('YouTube: '+(j.error&&j.error.message||r.status));return j}
+async function vtitle(id,key){try{const j=await (await fetch('https://www.youtube.com/oembed?format=json&url='+encodeURIComponent('https://www.youtube.com/watch?v='+id))).json();if(j.title)return j.title}catch{}
+ if(key){const j=await yt(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${id}&key=${key}`);if(j.items&&j.items.length)return j.items[0].snippet.title}return 'Vídeo '+id}
+async function uploads(it,key){const m=it.match(/channel\/(UC[\w-]{22})/);if(m)return 'UU'+m[1].slice(2);if(!key)throw new Error('Para @canal precisas da chave da API do YouTube.');const h=it.match(/@([\w.-]+)/);if(!h)throw new Error('Não reconheci o canal.');const j=await yt(`https://www.googleapis.com/youtube/v3/channels?part=contentDetails&forHandle=@${h[1]}&key=${key}`);if(!j.items||!j.items.length)throw new Error('Canal não encontrado.');return j.items[0].contentDetails.relatedPlaylists.uploads}
+async function addList(id,key,cid,have,rows){if(!key)throw new Error('Para playlists e canais precisas da chave da API do YouTube.');let tk='';do{const j=await yt(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${id}&key=${key}${tk?'&pageToken='+tk:''}`);for(const i of j.items){const s=i.snippet,v=s.resourceId.videoId;if(['Private video','Deleted video'].includes(s.title)||have.has(v))continue;have.add(v);rows.push({course_id:cid,title:s.title,kind:'youtube',source:v})}tk=j.nextPageToken||''}while(tk)}
+async function imp(){const cid=$('#sc').value;if(!cid)return toast('Cria e escolhe primeiro um curso.');const key=$('#yk').value.trim();if(key)localStorage.ytk=key;const links=$('#yp').value.split(/[\s,;]+/).filter(Boolean);if(!links.length)return toast('Cola pelo menos um link.');
+ try{const have=new Set((await get('lessons?select=source&kind=eq.youtube')).map(l=>l.source)),rows=[];
+ for(const it of links){const pl=it.match(/[?&]list=([A-Za-z0-9_-]+)/),vid=vidId(it);let list=null;
+  if(pl&&!pl[1].startsWith('RD'))list=pl[1];else if(!vid){if(/^UC[\w-]{22}$/.test(it))list='UU'+it.slice(2);else if(/^(PL|UU|OL|FL|LL)[\w-]+$/.test(it))list=it;else if(it.includes('@')||it.includes('/channel/'))list=await uploads(it,key);else throw new Error('Não reconheci este link: '+it)}
+  if(list)await addList(list,key,cid,have,rows);else if(!have.has(vid)){have.add(vid);rows.push({course_id:cid,title:await vtitle(vid,key),kind:'youtube',source:vid})}}
+ if(rows.length)await post('lessons',rows);toast(rows.length?rows.length+' vídeos importados.':'Nada de novo: já estavam importados.');draw()}catch(e){toast(e.message)}}
+async function saveQ(){const g=$('#qg').value,p=$('#qp').value.trim(),a=$('#qa').value.trim(),o=$('#qo').value.split(',').map(x=>x.trim()).filter(Boolean);if(!p||!a)return toast('Preenche pergunta e resposta.');
+ if(!['spelling','order'].includes(g)){if(o.length<2)return toast('Indica pelo menos 2 opções separadas por vírgula.');if(!o.some(x=>norm(x)==norm(a)))return toast('A resposta certa tem de estar entre as opções.')}
+ try{await post('questions',{game:g,difficulty:+$('#qd').value,prompt:p,options:o.length?o:null,answer:a,hint:$('#qh').value.trim()||null});['qp','qo','qa','qh'].forEach(i=>$('#'+i).value='');toast('Pergunta guardada.')}catch(e){toast(e.message)}}
+async function rm(id){if(!confirm('Remover esta aula para todos os alunos?'))return;try{await del(`lessons?id=eq.${id}`);toast('Aula removida.');draw()}catch(e){toast(e.message)}}
+async function cred(){const b={},e=$('#ne').value.trim(),p=$('#np').value;if(e)b.email=e;if(p)b.password=p;if(!e&&!p)return toast('Indica um novo e-mail e/ou palavra-passe.');try{await rq('/auth/v1/user',{m:'PUT',body:b});$('#ne').value=$('#np').value='';toast(e?'Atualizado. Confirma o novo e-mail, se for pedido.':'Credenciais atualizadas.')}catch(x){toast(x.message)}}
+// ===== Tempo real (consulta a cada 8 s) e arranque =====
+let sig='';setInterval(async()=>{if(!tok||V!='courses'||sub)return;try{const s=JSON.stringify(await Promise.all([get('lessons?select=id,title,source'),get('courses?select=id,title,description')]));if(sig&&s!=sig)draw();sig=s}catch{}},8000);
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+(async()=>{$('#app').innerHTML='<div class=lg><img src=icon-512.png></div>';await resume();render()})();
+</script></body></html>
